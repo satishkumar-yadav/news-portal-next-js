@@ -1,0 +1,1 @@
+export let Sample:number = 20 ;
