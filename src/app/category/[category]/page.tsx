@@ -1,6 +1,6 @@
 
-export default function page() {
+export default function CategoryPage() {
   return (
-    <div>page</div>
+    <div>category</div>
   )
 }
