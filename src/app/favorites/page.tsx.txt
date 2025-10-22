@@ -1,0 +1,29 @@
+// Favorites Page Updated (Auth Integration)
+
+"use client";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { getFavorites } from "../../services/favoriteService";
+import NewsGrid from "../../components/NewsGrid";
+import { Article } from "../../types/news";
+
+export default function FavoritesPage() {
+  const { data: session } = useSession();
+  const [articles, setArticles] = useState<Article[]>([]);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      getFavorites(session.user.email).then(setArticles);
+    }
+  }, [session]);
+
+  if (!session)
+    return <p className="text-center mt-10">Login to view your saved favorites.</p>;
+
+  return (
+    <main className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Your Favorites</h1>
+      <NewsGrid articles={articles} />
+    </main>
+  );
+}

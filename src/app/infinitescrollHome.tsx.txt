@@ -1,0 +1,94 @@
+
+export default function HomePage() {
+  
+  const [page, setPage] = useState(1);
+ 
+  const fetchPage = async (q?: string, p = 1) => {
+    setLoading(true);
+    const data = q ? await searchArticles(q) : await getTopHeadlines(p);
+    setArticles((prev) => [...prev, ...data]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPage("", page);
+  }, [page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200)
+        setPage((prev) => prev + 1);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleSearch = (q: string) => {
+    setQuery(q);
+    setArticles([]);
+    fetchPage(q, 1);
+  };
+
+//   return (
+//     <main className="p-6">
+//       <SearchBar onSearch={handleSearch} />
+//       <NewsGrid articles={articles} />
+      
+//     </main>
+//   );
+// }
+
+
+
+/*
+
+"use client";
+import { useEffect, useState } from "react";
+import NewsGrid from "../components/NewsGrid";
+import SearchBar from "../components/SearchBar";
+import { Article } from "../types/news";
+import { getTopHeadlines, searchArticles } from "../services/newsService";
+
+export default function HomePage() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState("");
+
+  const fetchPage = async (q?: string, p = 1) => {
+    setLoading(true);
+    const data = q ? await searchArticles(q) : await getTopHeadlines(p);
+    setArticles((prev) => [...prev, ...data]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPage("", page);
+  }, [page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200)
+        setPage((prev) => prev + 1);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleSearch = (q: string) => {
+    setQuery(q);
+    setArticles([]);
+    fetchPage(q, 1);
+  };
+
+  return (
+    <main className="p-6">
+      <SearchBar onSearch={handleSearch} />
+      <NewsGrid articles={articles} />
+      {loading && <p className="text-center mt-4">Loading more...</p>}
+    </main>
+  );
+}
+
+
+*/
